@@ -32,41 +32,34 @@ require_once "menu.view.php";
             </div>
         </header>
         <!-- Main Content-->
+        <?php
+        foreach($news as $newsContent):
+            ?>
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <?php
-                    foreach($newsHomepage as $item):
-                    ?>
+                <div class="col-md-10 col-lg-8 col-xl-12">
                     <!-- Post preview-->
                     <div class="post-preview">
-                        <a href="?detailArticle=<?=$item['slug']?>">
-                            <h2 class="post-title"><?=$item['title']?></h2>
-                            <h5 class="post-subtitle"><?=cutTheText($item['content'],255)?>... Lire la suite</h5>
+                        <a href="post.html">
+                            <h2 class="post-title"><?=$newsContent['title']?></h2>
+                            <h3 class="post-subtitle"><?=substr($newsContent['content'],0,250)?></h3>
                         </a>
-                        <p class="post-meta">
-                            Posté par
-                            <?php
-                            // si pas d'utilisateur ($item['thename'] === null) l'opérateur de coalescence (fusion) ?? fait la même chose que cette condition, on affiche anonyme
-                            $name = $item['thename'] ?? "Anonyme";
-                            $linkName = $item['login'] ?? "#";
-                            ?>
-                            <a href="?author=<?=$linkName?>"><?=$name?></a>
-                            <?php
-                            // pour gérer l'abscence de date de publication
-                            $date = $item['date_published'] ?? "";
-                            // conversion de la date en timestamp
-                            $date = strtotime($date);
-                            // si date n'est pas faux
-                            echo ($date)? " le ".date("d/m/Y \à H\hi",$date): " Pas publié !";
-                            ?>
+                        <p class="post-meta"> 
+                        <h5 id="<?=$newsContent['slug']?>"><?=$newsContent['slug']?></h5>                      
+                            Posted by
+                            <a href="#"><?=$newsContent['thename']?></a>
+                            on <?=$newsContent['date_published']?>
                         </p>
                     </div>
+                    
                     <!-- Divider-->
                     <hr class="my-4" />
+                    <!-- Post preview-->                   
                     <?php
-                    endforeach;
-                    ?>
+                endforeach;
+                        ?>                 
+                    <!-- Pager-->
+                    <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
                 </div>
             </div>
         </div>
