@@ -40,15 +40,39 @@ require_once "menu.view.php";
                 <div class="col-md-10 col-lg-8 col-xl-12">
                     <!-- Post preview-->
                     <div class="post-preview">
-                        <a href="post.html">
-                            <h2 class="post-title"><?=$newsContent['title']?></h2>
-                            <h3 class="post-subtitle"><?=substr($newsContent['content'],0,250)?></h3>
-                        </a>
-                        <p class="post-meta"> 
-                        <h5 id="<?=$newsContent['slug']?>"><?=$newsContent['slug']?></h5>                      
-                            Posted by
-                            <a href="#"><?=$newsContent['thename']?></a>
-                            on <?=$newsContent['date_published']?>
+                        <a href="?detailArticle=<?=$item['slug']?>">
+                            <h2 class="post-title"><?=$item['title']?></h2>
+                            <h5 class="post-subtitle"><?=cutTheText($item['content'],255)?>... Lire la suite</h5>
+                        </a><div>
+                        <?php
+                        // Pour les catégories, on va devoir couper les chaînes de caractères quand on trouve |||
+                        $categ_slug = explode("|||",$item['categ_slug']);
+                        $categ_title = explode("|||",$item['categ_title']);
+                        // tant qu'on a des valeurs
+                        foreach($categ_slug as $key => $value):
+                            // on affiche la valeur de la variable où on fait la boucle dans le lien et la variable contenant les titres en utilisant la clef correspondante
+                        ?>
+                        <a href="?section=<?=$value?>"><?=$categ_title[$key]?></a> | 
+                        <?php
+                        endforeach;
+                        ?>
+                    </div>
+                        <p class="post-meta">
+                            Posté par
+                            <?php
+                            // si pas d'utilisateur ($item['thename'] === null) l'opérateur de coalescence (fusion) ?? fait la même chose que cette condition, on affiche anonyme
+                            $name = $item['thename'] ?? "Anonyme";
+                            $linkName = $item['login'] ?? "#";
+                            ?>
+                            <a href="?author=<?=$linkName?>"><?=$name?></a>
+                            <?php
+                            // pour gérer l'abscence de date de publication
+                            $date = $item['date_published'] ?? "";
+                            // conversion de la date en timestamp
+                            $date = strtotime($date);
+                            // si date n'est pas faux
+                            echo ($date)? " le ".date("d/m/Y \à H\hi",$date): " Pas publié !";
+                            ?>
                         </p>
                     </div>
                     
