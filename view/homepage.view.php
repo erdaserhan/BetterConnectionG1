@@ -34,7 +34,6 @@ require_once "menu.view.php";
         <!-- Main Content-->        
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
-<<<<<<< HEAD
                 <div class="col-md-10 col-lg-8 col-xl-12">
                 <?php
                 foreach($news as $newsContent):
@@ -45,8 +44,19 @@ require_once "menu.view.php";
                             <h2 class="post-title"><?=$newsContent['title']?></h2>
                             <h4 class="post-subtitle"><?=cutTheText($newsContent['content'],255)?>... Lire la suite</h4>
                         </a>
-                        <p class="post-meta"> 
-                        <h5 id="<?=$newsContent['slug']?>"><?=$newsContent['slug']?></h5>                      
+                        <div>
+                        <?php
+                        $categ_slug = explode("|||", $newsContent['categ_slug']);
+                        $categ_title = explode("|||", $newsContent['categ_title']);
+                        //var_dump($categ_slug);
+                        foreach($categ_slug as $key => $value):
+                        ?>
+                        <a href="?section=<?=$value?>"><?=$categ_title[$key]?></a> |
+                        <?php
+                        endforeach
+                        ?>
+                        </div>
+                        <p class="post-meta">                       
                             Posted by
                             <?php
                             $name = $newsContent['thename'] ?? "Anonyme";
@@ -57,50 +67,17 @@ require_once "menu.view.php";
                             $date = $newsContent['date_published'] ?? "";
                             $date = strtotime($date);
                             echo ($date)? " le " .date("d/m/Y \à H\hi", $date): " Pas publié !";
-=======
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <?php
-                    foreach($newsHomepage as $item):
-                    ?>
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                        <a href="?detailArticle=<?=$item['slug']?>">
-                            <h2 class="post-title"><?=$item['title']?></h2>
-                            <h5 class="post-subtitle"><?=cutTheText($item['content'],255)?>... Lire la suite</h5>
-                        </a>
-                        <p class="post-meta">
-                            Posté par
-                            <?php
-                            // si pas d'utilisateur ($item['thename'] === null) l'opérateur de coalescence (fusion) ?? fait la même chose que cette condition, on affiche anonyme
-                            $name = $item['thename'] ?? "Anonyme";
-                            $linkName = $item['login'] ?? "#";
-                            ?>
-                            <a href="?author=<?=$linkName?>"><?=$name?></a>
-                            <?php
-                            // pour gérer l'abscence de date de publication
-                            $date = $item['date_published'] ?? "";
-                            // conversion de la date en timestamp
-                            $date = strtotime($date);
-                            // si date n'est pas faux
-                            echo ($date)? " le ".date("d/m/Y \à H\hi",$date): " Pas publié !";
->>>>>>> 8ccb900a0a5387f81e6c3c1fcecaacde2e5940ff
                             ?>
                         </p>
                     </div>
                     
                     <!-- Divider-->
                     <hr class="my-4" />
-<<<<<<< HEAD
                     <!-- Post preview-->                   
                 <?php
                 endforeach;
                 ?>                 
                    
-=======
-                    <?php
-                    endforeach;
-                    ?>
->>>>>>> 8ccb900a0a5387f81e6c3c1fcecaacde2e5940ff
                 </div>
             </div>
         </div>

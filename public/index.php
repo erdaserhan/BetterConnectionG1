@@ -32,15 +32,7 @@ try {
 $menuSlug = getAllCategoriesBySlug($db);
 $news = getAllNews($db);
 
-<<<<<<< HEAD
-var_dump($news);
-=======
-// chargement des news pour la page d'accueil
-$newsHomepage = getAllNewsHomePage($db);
-
-// var_dump($menuSlug);
-// var_dump($newsHomepage);
->>>>>>> 8ccb900a0a5387f81e6c3c1fcecaacde2e5940ff
+//var_dump($news);
 
 /*
 Appel de la vue
