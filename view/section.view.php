@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <title>BetterConnection | homepage</title>
+    <title>BetterConnection | <?=$category['title']?></title>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -23,47 +23,29 @@ require_once "menu.view.php";
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="site-heading">
-                            <h1>homepage</h1>
-                            <span class="subheading">Notre page d'accueil</span>
+                            <h1><?=$category['title']?></h1>
+                            <span class="subheading"><?=$category['description']?></span>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Main Content-->        
+        <!-- Main Content-->
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-12">
-                <?php
-                foreach($news as $newsContent):
-                ?>
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <h2>Que les news qui sont dans la catégorie</h2>
+                    <?php
+                    if(isset($message)) echo $message;
+                    foreach($newsIntoSection as $item):
+                    ?>
                     <!-- Post preview-->
                     <div class="post-preview">
-                        <a href="?detailArticle=<?=$newsContent['slug']?>">
-                            <h2 class="post-title"><?=$newsContent['title']?></h2>
-                            <h4 class="post-subtitle"><?=cutTheText($newsContent['content'],255)?>... Lire la suite</h4>
-                        </a>
-                        <div>
-                        <?php
-                        $categ_slug = explode("|||", $newsContent['categ_slug']);
-                        $categ_title = explode("|||", $newsContent['categ_title']);
-                        //var_dump($categ_slug);
-                        foreach($categ_slug as $key => $value):
-                        ?>
-                        <a href="?section=<?=$value?>"><?=$categ_title[$key]?></a> |
-                        <?php
-                        endforeach
-                        ?>
-                        </div>
-                        <p class="post-meta">                       
-                            Posted by
                         <a href="?detailArticle=<?=$item['slug']?>">
                             <h2 class="post-title"><?=$item['title']?></h2>
                             <h5 class="post-subtitle"><?=cutTheText($item['content'],255)?>... Lire la suite</h5>
                         </a><div>
                         <?php
-                    // si on a des rubriques
-                    if(!is_null($item['categ_slug'])):
                         // Pour les catégories, on va devoir couper les chaînes de caractères quand on trouve |||
                         $categ_slug = explode("|||",$item['categ_slug']);
                         $categ_title = explode("|||",$item['categ_title']);
@@ -74,31 +56,31 @@ require_once "menu.view.php";
                         <a href="?section=<?=$value?>"><?=$categ_title[$key]?></a> | 
                         <?php
                         endforeach;
-                    endif;
                         ?>
                     </div>
                         <p class="post-meta">
                             Posté par
                             <?php
-                            $name = $newsContent['thename'] ?? "Anonyme";
-                            $linkName = $newsContent['login'] ?? "#";
+                            // si pas d'utilisateur ($item['thename'] === null) l'opérateur de coalescence (fusion) ?? fait la même chose que cette condition, on affiche anonyme
+                            $name = $item['thename'] ?? "Anonyme";
+                            $linkName = $item['login'] ?? "#";
                             ?>
                             <a href="?author=<?=$linkName?>"><?=$name?></a>
                             <?php
-                            $date = $newsContent['date_published'] ?? "";
+                            // pour gérer l'abscence de date de publication
+                            $date = $item['date_published'] ?? "";
+                            // conversion de la date en timestamp
                             $date = strtotime($date);
-                            echo ($date)? " le " .date("d/m/Y \à H\hi", $date): " Pas publié !";
+                            // si date n'est pas faux
+                            echo ($date)? " le ".date("d/m/Y \à H\hi",$date): " Pas publié !";
                             ?>
                         </p>
                     </div>
-                    
                     <!-- Divider-->
                     <hr class="my-4" />
-                    <!-- Post preview-->                   
-                <?php
-                endforeach;
-                ?>                 
-                   
+                    <?php
+                    endforeach;
+                    ?>
                 </div>
             </div>
         </div>
